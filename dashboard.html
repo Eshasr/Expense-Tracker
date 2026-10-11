@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div id="dashboard" data-month="{{ month }}">
+
+    <div class="page-header">
+        <div>
+            <h1>Dashboard</h1>
+            <p class="page-subtitle">Overview for {{ month }}</p>
+        </div>
+        <div class="toolbar">
+            <a class="btn" href="{{ url_for('add_transaction') }}">+ Add Transaction</a>
+            <a class="btn btn-outline" href="{{ url_for('export_excel', month=month) }}">Export Excel</a>
+            <a class="btn btn-outline" href="{{ url_for('export_csv', month=month) }}">Export CSV</a>
+        </div>
+    </div>
+
+    <!-- Month filter -->
+    <form method="get" class="filters">
+        <div class="form-group">
+            <label for="month">Month</label>
+            <input type="month" id="month" name="month" value="{{ month }}" data-autosubmit>
+        </div>
+        <button type="submit" class="btn btn-secondary">Apply</button>
+    </form>
+
+    <!-- Summary cards -->
+    <div class="grid grid-4">
+        <div class="stat-card stat-income">
+            <div class="stat-label">Income</div>
+            <div class="stat-value">₹{{ "{:,.2f}".format(totals.income) }}</div>
+        </div>
+        <div class="stat-card stat-expense">
+            <div class="stat-label">Expenses</div>
+            <div class="stat-value">₹{{ "{:,.2f}".format(totals.expense) }}</div>
+        </div>
+        <div class="stat-card stat-balance">
+            <div class="stat-label">Balance</div>
+            <div class="stat-value {{ 'text-expense' if balance < 0 else '' }}">₹{{ "{:,.2f}".format(balance) }}</div>
+        </div>
+        <div class="stat-card stat-budget">
+            <div class="stat-label">Monthly Budget</div>
+            <div class="stat-value">
+                {% if budget and budget > 0 %}₹{{ "{:,.2f}".format(budget) }}{% else %}Not set{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="card">
+        <h2 class="card-title">Budget</h2>
+
+        {% if budget and budget > 0 %}
+            <div class="progress" role="progressbar" aria-valuenow="{{ [budget_pct, 100]|min }}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar {{ budget_level }}" style="width: {{ [budget_pct, 100]|min }}%"></div>
+            </div>
+            <div class="budget-meta mb-2">
+                <span>Spent ₹{{ "{:,.2f}".format(totals.expense) }} of ₹{{ "{:,.2f}".format(budget) }}</span>
+                <span>{{ budget_pct }}% used</span>
+            </div>
+
+            {% if budget_level == 'exceeded' %}
+                <div class="alert alert-danger">You have exceeded your monthly budget by ₹{{ "{:,.2f}".format(totals.expense - budget) }}.</div>
+            {% elif budget_level == 'warning' %}
+                <div class="alert alert-warning">You have used over 80% of your monthly budget. ₹{{ "{:,.2f}".format(budget - totals.expense) }} left.</div>
+            {% else %}
+                <p class="text-muted">You are within budget. ₹{{ "{:,.2f}".format(budget - totals.expense) }} left this month.</p>
+            {% endif %}
+        {% else %}
+            <p class="text-muted">Set a monthly budget to get alerts when you are close to your limit.</p>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('set_budget') }}" class="budget-form">
+            <div class="form-group">
+                <label for="budget">Monthly budget (₹)</label>
+                <input type="number" id="budget" name="budget" min="0" step="0.01" value="{{ budget or '' }}" required>
+            </div>
+            <button type="submit" class="btn">Save Budget</button>
+        </form>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-2">
+        <div class="card">
+            <h2 class="card-title">Spending by Category</h2>
+            <div class="chart-box" id="categoryBox"><canvas id="categoryChart"></canvas></div>
+        </div>
+        <div class="card">
+            <h2 class="card-title">Daily Spending</h2>
+            <div class="chart-box" id="dailyBox"><canvas id="dailyChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Income vs Expenses (Last 6 Months)</h2>
+        <div class="chart-box" id="trendBox"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <!-- Insights -->
+    <div class="card">
+        <h2 class="card-title">Insights</h2>
+        <ul class="insights-list" id="insightsList">
+            <li>Loading insights...</li>
+        </ul>
+    </div>
+
+    <!-- Recent transactions -->
+    <div class="card">
+        <div class="page-header mb-1">
+            <h2 class="card-title" style="border:0; padding:0; margin:0;">Recent Transactions</h2>
+            <a class="btn btn-outline btn-sm" href="{{ url_for('transactions', month=month) }}">View all</a>
+        </div>
+
+        {% if recent %}
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th class="num">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in recent %}
+                    <tr>
+                        <td>{{ t.date.strftime('%d %b %Y') }}</td>
+                        <td class="wrap">{{ t.description or '—' }}</td>
+                        <td><span class="badge">{{ t.category }}</span></td>
+                        <td class="num {{ 'amount-income' if t.type == 'income' else 'amount-expense' }}">
+                            {{ '+' if t.type == 'income' else '-' }}₹{{ "{:,.2f}".format(t.amount) }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No transactions for this month yet.</p>
+            <a class="btn" href="{{ url_for('add_transaction') }}">Add your first transaction</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    /* Chart rendering lives in main.js; it reads data-month from #dashboard. */
+    if (window.SpendWise) { window.SpendWise.initDashboard(); }
+</script>
+{% endblock %}

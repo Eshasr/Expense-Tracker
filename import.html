@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Import Statement{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Import Statement</h1>
+        <p class="page-subtitle">Upload a bank or UPI statement in CSV format.</p>
+    </div>
+    <a class="btn btn-outline" href="{{ url_for('transactions') }}">Back to Transactions</a>
+</div>
+
+<div class="card">
+    <h2 class="card-title">Upload CSV</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class="upload-box">
+            <div class="form-group mb-0">
+                <label for="file">Choose a .csv file (max 2 MB)</label>
+                <input type="file" id="file" name="file" accept=".csv,text/csv" required>
+            </div>
+        </div>
+        <button type="submit" class="btn">Import Transactions</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2 class="card-title">How the import works</h2>
+    <ul class="help-list">
+        <li>The file needs a <code>Date</code> column and either an <code>Amount</code> column, or separate <code>Debit</code> and <code>Credit</code> columns.</li>
+        <li>A description column (<code>Description</code>, <code>Narration</code>, <code>Particulars</code>, <code>Details</code> or <code>Remarks</code>) is used to pick the category automatically.</li>
+        <li>With a single <code>Amount</code> column, negative values are treated as expenses and positive values as income. An optional <code>Type</code> or <code>Dr/Cr</code> column overrides this.</li>
+        <li>Dates are read day-first (for example 05/10/2026 is 5 October 2026).</li>
+        <li>Rows already in your account with the same date, amount, description and type are skipped, so importing the same file twice is safe.</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2 class="card-title">Example format</h2>
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th class="num">Debit</th>
+                    <th class="num">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>01/10/2026</td><td>UPI-SWIGGY-ORDER</td><td class="num">320.00</td><td class="num"></td></tr>
+                <tr><td>02/10/2026</td><td>UPI-UBER-TRIP</td><td class="num">185.50</td><td class="num"></td></tr>
+                <tr><td>05/10/2026</td><td>SALARY OCTOBER</td><td class="num"></td><td class="num">25000.00</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,735 @@
+/* ==========================================================================
+   SpendWise - style.css
+   Plain, solid-color theme. No gradients, no heavy effects.
+   Sections: 1 Variables | 2 Base | 3 Navbar | 4 Layout | 5 Buttons | 6 Forms
+             7 Cards & Stats | 8 Budget | 9 Tables | 10 Alerts | 11 Charts
+             12 Auth | 13 Import | 14 Footer | 15 Utilities | 16 Responsive
+   ========================================================================== */
+
+/* 1. Variables ------------------------------------------------------------ */
+:root {
+    --primary: #1d4ed8;
+    --primary-dark: #1e40af;
+    --nav-bg: #1e293b;
+    --nav-text: #e2e8f0;
+
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+    --border: #d0d7de;
+    --text: #1f2937;
+    --text-muted: #5b6573;
+
+    --income: #15803d;
+    --income-bg: #dcfce7;
+    --expense: #b91c1c;
+    --expense-bg: #fee2e2;
+    --warning: #b45309;
+    --warning-bg: #fef3c7;
+    --info: #1d4ed8;
+    --info-bg: #dbeafe;
+
+    --radius: 6px;
+    --font: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 2. Base ----------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+}
+
+h1, h2, h3, h4 {
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+    color: var(--text);
+}
+
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.05rem; }
+
+p { margin: 0 0 0.75rem; }
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img, canvas {
+    max-width: 100%;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* 3. Navbar --------------------------------------------------------------- */
+.navbar {
+    background: var(--nav-bg);
+    color: var(--nav-text);
+}
+
+.navbar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+}
+
+.nav-brand {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.nav-brand:hover {
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    color: var(--nav-text);
+    border-radius: var(--radius);
+}
+
+.nav-links a:hover {
+    background: #334155;
+    text-decoration: none;
+}
+
+.nav-links a.active {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.nav-user {
+    color: #94a3b8;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+}
+
+/* 4. Layout --------------------------------------------------------------- */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.25rem 1rem;
+    flex: 1;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 5. Buttons -------------------------------------------------------------- */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    color: #ffffff;
+    background: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: #475569;
+    border-color: #475569;
+}
+
+.btn-secondary:hover {
+    background: #334155;
+    border-color: #334155;
+}
+
+.btn-outline {
+    color: var(--primary);
+    background: var(--surface);
+    border-color: var(--primary);
+}
+
+.btn-outline:hover {
+    color: #ffffff;
+    background: var(--primary);
+}
+
+.btn-success {
+    background: var(--income);
+    border-color: var(--income);
+}
+
+.btn-success:hover {
+    background: #166534;
+    border-color: #166534;
+}
+
+.btn-danger {
+    background: var(--expense);
+    border-color: var(--expense);
+}
+
+.btn-danger:hover {
+    background: #991b1b;
+    border-color: #991b1b;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* 6. Forms ---------------------------------------------------------------- */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="month"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-hint {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Income / Expense choice (two radio buttons styled as a toggle) */
+.type-toggle {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.type-toggle label {
+    flex: 1;
+    margin: 0;
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.type-toggle input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.type-toggle input[value="expense"]:checked + label {
+    color: #ffffff;
+    background: var(--expense);
+    border-color: var(--expense);
+}
+
+.type-toggle input[value="income"]:checked + label {
+    color: #ffffff;
+    background: var(--income);
+    border-color: var(--income);
+}
+
+.type-toggle input:focus-visible + label {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Inline filter bar (month picker, category select) */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.filters .form-group {
+    margin: 0;
+    min-width: 150px;
+}
+
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+/* 7. Cards & stats -------------------------------------------------------- */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.6rem;
+    font-size: 1.05rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.grid > .card {
+    margin-bottom: 0;
+}
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.1rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    margin-top: 0.15rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.stat-income  { border-left-color: var(--income); }
+.stat-income .stat-value  { color: var(--income); }
+.stat-expense { border-left-color: var(--expense); }
+.stat-expense .stat-value { color: var(--expense); }
+.stat-balance { border-left-color: var(--primary); }
+.stat-budget  { border-left-color: var(--warning); }
+
+/* 8. Budget --------------------------------------------------------------- */
+.budget-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.budget-form .form-group {
+    margin: 0;
+    flex: 1;
+    min-width: 160px;
+}
+
+.progress {
+    width: 100%;
+    height: 14px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    background: #e2e8f0;
+    border-radius: 7px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--income);
+}
+
+.progress-bar.ok       { background: var(--income); }
+.progress-bar.warning  { background: #d97706; }
+.progress-bar.exceeded { background: var(--expense); }
+
+.budget-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* 9. Tables --------------------------------------------------------------- */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+}
+
+.table td.wrap {
+    white-space: normal;
+    min-width: 160px;
+}
+
+.table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    background: #f8fafc;
+}
+
+.table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table .num {
+    text-align: right;
+}
+
+.amount-income  { color: var(--income);  font-weight: 600; }
+.amount-expense { color: var(--expense); font-weight: 600; }
+
+.badge {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #334155;
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+.badge-income  { color: var(--income);  background: var(--income-bg); }
+.badge-expense { color: var(--expense); background: var(--expense-bg); }
+
+.actions {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* 10. Alerts (flash messages) -------------------------------------------- */
+.alert {
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+}
+
+.alert-success { color: #14532d; background: var(--income-bg);  border-color: #86efac; }
+.alert-danger  { color: #7f1d1d; background: var(--expense-bg); border-color: #fca5a5; }
+.alert-warning { color: #78350f; background: var(--warning-bg); border-color: #fcd34d; }
+.alert-info    { color: #1e3a8a; background: var(--info-bg);    border-color: #93c5fd; }
+
+/* 11. Charts & insights --------------------------------------------------- */
+.chart-box {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.insights-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.insights-list li {
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+    background: #f8fafc;
+    border-left: 4px solid var(--primary);
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.insights-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* 12. Auth pages (login / register) -------------------------------------- */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.auth-card h1 {
+    margin-bottom: 0.25rem;
+    text-align: center;
+}
+
+.auth-card .page-subtitle {
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.auth-footer {
+    margin: 1.1rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* 13. Import page --------------------------------------------------------- */
+.upload-box {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    background: #f8fafc;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+.help-list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+}
+
+.help-list li {
+    margin-bottom: 0.25rem;
+}
+
+code {
+    padding: 0.1rem 0.35rem;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.85em;
+    background: #e2e8f0;
+    border-radius: 3px;
+}
+
+/* 14. Footer -------------------------------------------------------------- */
+.footer {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+}
+
+/* 15. Utilities ----------------------------------------------------------- */
+.text-muted   { color: var(--text-muted); }
+.text-right   { text-align: right; }
+.text-center  { text-align: center; }
+.text-income  { color: var(--income); }
+.text-expense { color: var(--expense); }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.hidden { display: none; }
+
+/* 16. Responsive ---------------------------------------------------------- */
+@media (max-width: 900px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filters .form-group {
+        flex: 1 1 100%;
+    }
+
+    .chart-box {
+        height: 240px;
+    }
+
+    .stat-value {
+        font-size: 1.3rem;
+    }
+}
+
+@media print {
+    .navbar,
+    .footer,
+    .filters,
+    .actions,
+    .btn {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff;
+    }
+
+    .card,
+    .table-wrapper {
+        border-color: #999999;
+    }
+}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+{% set total_income = items|selectattr('type', 'equalto', 'income')|sum(attribute='amount') %}
+{% set total_expense = items|selectattr('type', 'equalto', 'expense')|sum(attribute='amount') %}
+
+<div class="page-header">
+    <div>
+        <h1>Transactions</h1>
+        <p class="page-subtitle">{{ items|length }} record{{ '' if items|length == 1 else 's' }} for {{ month }}</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn" href="{{ url_for('add_transaction') }}">+ Add Transaction</a>
+        <a class="btn btn-outline" href="{{ url_for('import_statement') }}">Import CSV</a>
+        <a class="btn btn-outline" href="{{ url_for('export_excel', month=month) }}">Export Excel</a>
+        <a class="btn btn-outline" href="{{ url_for('export_csv', month=month) }}">Export CSV</a>
+    </div>
+</div>
+
+<!-- Filters -->
+<form method="get" class="filters">
+    <div class="form-group">
+        <label for="month">Month</label>
+        <input type="month" id="month" name="month" value="{{ month }}" data-autosubmit>
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" data-autosubmit>
+            <option value="">All categories</option>
+            {% for c in categories %}
+                <option value="{{ c }}" {{ 'selected' if c == selected_category }}>{{ c }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-secondary">Apply</button>
+    <a class="btn btn-outline" href="{{ url_for('transactions') }}">Reset</a>
+</form>
+
+{% if items %}
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th class="num">Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in items %}
+            <tr>
+                <td>{{ t.date.strftime('%d %b %Y') }}</td>
+                <td class="wrap">{{ t.description or '—' }}</td>
+                <td><span class="badge">{{ t.category }}</span></td>
+                <td>
+                    <span class="badge {{ 'badge-income' if t.type == 'income' else 'badge-expense' }}">{{ t.type|capitalize }}</span>
+                </td>
+                <td class="num {{ 'amount-income' if t.type == 'income' else 'amount-expense' }}">
+                    {{ '+' if t.type == 'income' else '-' }}₹{{ "{:,.2f}".format(t.amount) }}
+                </td>
+                <td>
+                    <div class="actions">
+                        <a class="btn btn-outline btn-sm" href="{{ url_for('edit_transaction', txn_id=t.id) }}">Edit</a>
+                        <form class="inline-form" method="post"
+                              action="{{ url_for('delete_transaction', txn_id=t.id) }}"
+                              data-confirm="Delete this transaction? This cannot be undone.">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="grid grid-3 mt-2">
+    <div class="stat-card stat-income">
+        <div class="stat-label">Total Income</div>
+        <div class="stat-value">₹{{ "{:,.2f}".format(total_income) }}</div>
+    </div>
+    <div class="stat-card stat-expense">
+        <div class="stat-label">Total Expenses</div>
+        <div class="stat-value">₹{{ "{:,.2f}".format(total_expense) }}</div>
+    </div>
+    <div class="stat-card stat-balance">
+        <div class="stat-label">Net</div>
+        <div class="stat-value {{ 'text-expense' if total_income - total_expense < 0 else '' }}">₹{{ "{:,.2f}".format(total_income - total_expense) }}</div>
+    </div>
+</div>
+{% else %}
+<div class="card empty-state">
+    <p>No transactions found for these filters.</p>
+    <a class="btn" href="{{ url_for('add_transaction') }}">Add a transaction</a>
+</div>
+{% endif %}
+{% endblock %}

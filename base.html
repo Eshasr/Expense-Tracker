@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}SpendWise{% endblock %} | SpendWise</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% set ep = request.endpoint %}
+    <header class="navbar">
+        <div class="navbar-inner">
+            <a class="nav-brand" href="{{ url_for('index') }}">SpendWise</a>
+            <nav>
+                <ul class="nav-links">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if ep == 'dashboard' }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('transactions') }}" class="{{ 'active' if ep in ('transactions', 'edit_transaction') }}">Transactions</a></li>
+                        <li><a href="{{ url_for('add_transaction') }}" class="{{ 'active' if ep == 'add_transaction' }}">Add</a></li>
+                        <li><a href="{{ url_for('import_statement') }}" class="{{ 'active' if ep == 'import_statement' }}">Import</a></li>
+                        <li><span class="nav-user">{{ current_user.username }}</span></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="{{ 'active' if ep == 'login' }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}" class="{{ 'active' if ep == 'register' }}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        SpendWise &ndash; Smart Expense Tracker
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

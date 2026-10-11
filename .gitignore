@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets and config
+.env
+
+# Database and Flask instance folder
+instance/
+*.db
+*.sqlite3
+
+# Uploads and exports
+uploads/
+*.xlsx
+*.csv
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
